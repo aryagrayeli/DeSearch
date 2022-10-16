@@ -3,7 +3,6 @@ import math
 import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
-from difflib import SequenceMatcher
 
 class Recommender:
 
@@ -11,7 +10,6 @@ class Recommender:
     BANNED_SEARCH = -sys.float_info.max+1
     def __init__(self) -> None:
         pass
-
     #past_searchs is tuple is query and time
     def score(self, text, query, past_searches):
         score=0
@@ -32,11 +30,12 @@ class Recommender:
 
     def childfriendlyScoring(self, text):
         text = self.filterCommonWords(text)
+        score = 0
         wordscoring=0
         #Positive Words
-        wordscoring += self.countWords(text,"engine/recommender_data/PositiveWords.txt")
+        wordscoring += self.countWords(text,"PositiveWords.txt")
         #Negative Words
-        wordscoring += .5*self.countWords(text,"engine/recommender_data/NegativeWords.txt")
+        wordscoring += .5*self.countWords(text,"NegativeWords.txt")
         wordscoring /= len(text)
         return wordscoring
     
@@ -56,18 +55,15 @@ class Recommender:
         tfidf_matrix = tfidf_vectorizer.fit_transform(corpus)
         return cosine_similarity(tfidf_matrix,tfidf_matrix)[0][1]
 
-    def compare_url(self, url1, url2):
-        return SequenceMatcher(None, url1, url2).ratio()
-
     def filterCommonWords(self, text):
-        commonwordsfile = open("engine/recommender_data/MostCommonWords.txt")
+        commonwordsfile = open("MostCommonWords.txt")
         commonwordslist = commonwordsfile.readlines()
         for commonword in commonwordslist:
             text=text.replace(commonword,"")
         return text
 
     def containsBadWord(self,text):
-        badwordsfile = open('engine/recommender_data/BadWords.txt')
+        badwordsfile = open('BadWords.txt')
         badwordslist = badwordsfile.readlines()
         for badword in badwordslist:
             badword=badword.replace('\n','')
@@ -85,3 +81,4 @@ class Recommender:
             if (text.find(word) != -1):
                 count= count + 1
         return count
+    

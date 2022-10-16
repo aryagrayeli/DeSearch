@@ -1,0 +1,24 @@
+{% extends 'engine/base.html' %}
+{% load static %}
+{% block content %}
+<style>
+    div {
+        text-align: center;
+    }
+    .search-bar{
+        margin-top: 5%;
+    }
+</style>
+    <div class="home">
+        <img src="../static/images/desearch-logo.png" alt="desearch engine"  width="400" height="300">
+        <div class="search-bar">
+            <form method="POST" action="results">
+                {% csrf_token %}
+                <input class="form-control form-control-lg" type="text" placeholder="Start desearching" name="search" style="margin-bottom: 3%; background-color: whitesmoke;" autocomplete="off">
+                <button type="submit" class="btn btn-dark">search</button>
+
+            </form>
+        </div>
+       
+    </div>
+{% endblock content %}

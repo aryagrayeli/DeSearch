@@ -38,6 +38,7 @@ class Crawler:
                         break
 
             urls = next_process
+            print(len(self.stored_urls))
 
         self.stored_urls.sort(reverse=True)
         out_urls = self.stored_urls[self.page_threshold*page_number: self.page_threshold*(page_number+1)]

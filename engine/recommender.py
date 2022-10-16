@@ -27,7 +27,7 @@ class Recommender:
         #if Recommender.containsWords(inputText,"engine/recommender_data/BadWords.txt"): return -1
         #`if Recommender.containsWords(inputText,"engine/recommender_data/BadWords.txt"): return -1
         #Calculate Score
-        score = (Recommender.polarityScoring(text)+Recommender.factScoring(text))**Recommender.get_similarity(text,query)
+        score = (Recommender.polarityScoring(text)+Recommender.factScoring(text))*Recommender.get_similarity(text,query)
         print(score)
         return score
 
@@ -58,13 +58,13 @@ class Recommender:
     @staticmethod
     def polarityScoring(text):
         scores = SentimentIntensityAnalyzer().polarity_scores(text)
-        return (-0.75*scores['neg'] + 0.25*scores['neu'] + 1.25*scores['pos']) / scores['compound']
+        return (-0.75*scores['neg'] + 0.25*scores['neu'] + 0.5*scores['pos']) / (scores['compound']+0.000001)
     
     @staticmethod
     def factScoring(text):
         if Recommender.containsWords(text,"engine/recommender_data/EducationalSites.txt"):
-            return 1
-        return 0
+            return 0.5
+        return 0.0
 
 #Input Cleaning
 

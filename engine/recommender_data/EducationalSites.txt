@@ -2,50 +2,21 @@ udemy
 coursera
 edx
 udacity
-alison
-futurelearn
-openlearning
-elearnmarkets
-lynda
-khanacademy
-khan academy
 ted
 tedx
-academicearth
-pluralsight
-vivaelearning
-codeacademy
-html dog
-rubymonk
-codingbat java
 duolingo
-babbel
-bbc languages
-memrise
-verbling
-gutenburg
-librivox
-bartleby
-poemhunter
-ebooks
-instrucatbles
-wikihow
-wonderhowto
 howstuffworks
-howcast
 wikipedia
-mental floss
-sporcle
 nationalgeographic
-freckle
-abcmouse
-pbskids
-coolmath4kids
 khanacademy
-mysteryscience
-razkids
-starfall
-disney
 nasa
-math
-mathisfun
+forbes
+nytimes
+wsj
+washingtonpost
+bbc
+enonomist
+times
+newyorker
+bloomberg
+politico

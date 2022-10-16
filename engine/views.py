@@ -6,8 +6,8 @@ from engine.webcrawler import Crawler
 
 score_threshold = 0.1
 page_threshold = 5
-match_threshold = 0.5
-url_match_threshold = 0.5
+match_threshold = 0.8
+url_match_threshold = 0.8
 
 
 def query(request):

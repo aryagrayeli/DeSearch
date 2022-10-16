@@ -17,7 +17,7 @@ class Crawler:
         self.url_match_threshold = url_match_threshold
         self.recommender = Recommender()
 
-    def crawl(self, urls, query, past_searches, page_number):
+    def crawl(self, urls, query, page_number):
         start_url = urls[0]
         while urls:
             if(len(self.stored_urls) >= (self.page_threshold * (page_number+1))):
@@ -26,7 +26,7 @@ class Crawler:
             next_process = []
             for url in urls:
                 text = read_text(url)
-                score = self.recommender.score(text, query, past_searches)
+                score = self.recommender.score(text, query)
                 if score > self.score_threshold:
                     if self.check_seen_urls(url, score):
                         continue

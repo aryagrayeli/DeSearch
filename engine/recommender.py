@@ -5,6 +5,11 @@ import numpy as np
 import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from difflib import SequenceMatcher
+import nltk
+nltk.download(["averaged_perceptron_tagger", "punkt", "vader_lexicon"])
+
+from nltk.sentiment import SentimentIntensityAnalyzer
+
 
 class Recommender:
 
@@ -12,21 +17,18 @@ class Recommender:
         pass
     #past_searchs is tuple is query and time
     @staticmethod
-    def score(inputText, inputQuery, intputpast_searches):
+    def score(inputText, inputQuery):
         #Clean Input
         text = Recommender.cleanText(inputText,True)
         query = Recommender.cleanText(inputQuery,False)
-        past_searches = []
-        for search in intputpast_searches:
-            past_searches.append((Recommender.cleanText(search[0],False),search[1]))
         #Check for size
         if len(text) == 0: return 0
         #Check for Bad Words
         #if Recommender.containsWords(inputText,"engine/recommender_data/BadWords.txt"): return -1
         #`if Recommender.containsWords(inputText,"engine/recommender_data/BadWords.txt"): return -1
         #Calculate Score
-        print( str(Recommender.get_similarity(text,query)) +" "+ str(Recommender.childfriendlyScoring(text)) +" "+ str(Recommender.historicalScoring(text,query,past_searches)))
-        score = (Recommender.childfriendlyScoring(text)*Recommender.historicalScoring(text,query,past_searches))**Recommender.get_similarity(text,query) 
+        score = (Recommender.polarityScoring(text)+Recommender.factScoring(text))**Recommender.get_similarity(text,query)
+        print(score)
         return score
 
 # Similarity Check
@@ -54,31 +56,15 @@ class Recommender:
 # Scoring Metricologies  
 
     @staticmethod
-    def childfriendlyScoring(text):
-        totalPositiveWords = Recommender.countWords(text,"engine/recommender_data/PositiveWords.txt")
-        totalNegativeWords = Recommender.countWords(text,"engine/recommender_data/NegativeWords.txt")
-        totalWords = totalPositiveWords + totalNegativeWords
-        if totalWords == 0 :
-            return 0.1
-        ratio = totalPositiveWords/totalWords
-        #Further Polarize ration
-        return ratio
-
+    def polarityScoring(text):
+        scores = SentimentIntensityAnalyzer().polarity_scores(text)
+        return (-0.75*scores['neg'] + 0.25*scores['neu'] + 1.25*scores['pos']) / scores['compound']
+    
     @staticmethod
-    def historicalScoring(text, query, past_searches):
-        historicalScore = 0
-        oldestTime = Recommender.getOldestSearch(past_searches)
-        for search in past_searches:
-            currentScore = Recommender.get_similarity(text,search[0])
-            currentScore *= abs((float(search[1])/oldestTime))
-            print(currentScore)
-            if(currentScore==0): 
-                currentScore = .01
-            historicalScore*=currentScore
-        if(historicalScore==0):
-            return .1
-        return historicalScore^(1/len(past_searches))
-        
+    def factScoring(text):
+        if Recommender.containsWords(text,"engine/recommender_data/EducationalSites.txt"):
+            return 1
+        return 0
 
 #Input Cleaning
 

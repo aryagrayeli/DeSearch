@@ -1,13 +1,10 @@
 from nis import match
 from django.shortcuts import render
 
-from bs4 import BeautifulSoup 
-import requests 
-
 from engine.database import get_personalized_data
 from engine.webcrawler import Crawler
 
-score_threshold = 0.002
+score_threshold = 0.1
 page_threshold = 5
 match_threshold = 0.5
 url_match_threshold = 0.5
@@ -60,11 +57,10 @@ def get_page(query, page_number):
         urls = ['https://google.com/search?q='+query]
 
         # load personalized data
-        past_searches = get_personalized_data()
         
         # crawl web
         crawler = Crawler(score_threshold, page_threshold, match_threshold, url_match_threshold)
-        results = crawler.crawl(urls, query, past_searches, page_number) # each item is (title, description, url)
+        results = crawler.crawl(urls, query, page_number) # each item is (title, description, url)
         
         context = {
             'results':results,
